@@ -1,7 +1,7 @@
 {
-  "name": "auth",
+  "name": "user-management",
   "version": "0.0.0",
-  "description": "TypeScript + Prisma + MySQL + Express API Server",
+  "description": "User management server",
   "author": "",
   "license": "ISC",
   "scripts": {
