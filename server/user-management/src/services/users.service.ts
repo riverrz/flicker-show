@@ -1,5 +1,5 @@
 import { hash } from 'bcrypt';
-import { PrismaClient, User } from '@prisma/client';
+import { Prisma, PrismaClient, User } from '@prisma/client';
 import { CreateUserDto } from '@dtos/users.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
@@ -12,17 +12,17 @@ class UserService {
     return allUser;
   }
 
-  public async findUserById(userId: number): Promise<User> {
-    if (isEmpty(userId)) throw new HttpException(400, "UserId is empty");
+  public async findUserById(userId: number, include: Prisma.UserInclude = {}): Promise<User> {
+    if (isEmpty(userId)) throw new HttpException(400, 'UserId is empty');
 
-    const findUser: User = await this.users.findUnique({ where: { id: userId } });
+    const findUser: User = await this.users.findUnique({ where: { id: userId }, include });
     if (!findUser) throw new HttpException(409, "User doesn't exist");
 
     return findUser;
   }
 
   public async createUser(userData: CreateUserDto): Promise<User> {
-    if (isEmpty(userData)) throw new HttpException(400, "userData is empty");
+    if (isEmpty(userData)) throw new HttpException(400, 'userData is empty');
 
     const findUser: User = await this.users.findUnique({ where: { email: userData.email } });
     if (findUser) throw new HttpException(409, `This email ${userData.email} already exists`);
@@ -33,7 +33,7 @@ class UserService {
   }
 
   public async updateUser(userId: number, userData: CreateUserDto): Promise<User> {
-    if (isEmpty(userData)) throw new HttpException(400, "userData is empty");
+    if (isEmpty(userData)) throw new HttpException(400, 'userData is empty');
 
     const findUser: User = await this.users.findUnique({ where: { id: userId } });
     if (!findUser) throw new HttpException(409, "User doesn't exist");
