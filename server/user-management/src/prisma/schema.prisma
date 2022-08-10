@@ -15,12 +15,16 @@ model User {
   email    String    @unique
   password String
   profile  Profile[]
+  @@index([id])
 }
 
 model Profile {
   id     Int    @id @default(autoincrement())
   name   String
   age    Int
-  user   User   @relation(fields: [userId], references: [id])
-  userId Int
+  user   User   @relation(fields: [userId], references: [id] )
+  userId Int 
+
+  @@index([userId])
+  @@index([id])
 }
